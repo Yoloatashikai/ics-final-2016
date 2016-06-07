@@ -40,6 +40,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
   registerNotificationPermission();
   cordova.plugins.backgroundMode.enable();
+  alert("yolo");
   intialLoad();
   // Refer to https://github.com/christocracy/cordova-plugin-background-geolocation
 
@@ -251,13 +252,14 @@ function geolocationWatchSuccess_helper(lat, lng) {
     var last5Distance = closestStoreDistance+50;
     var last10Distance = closestStoreDistance+50;
     // logic for proximity message
-    if (closestStoreProximityMessage != null && closestStoreDistance < 300) {
-      last5Distance = distEuclidean(closestStoreLat, closestStoreLng, last5Geo.lat, last5Geo.lng);
-      if (lastProximityMessage != closestStoreProximityMessage) { // Show only once 
-        lastProximityMessage = closestStoreProximityMessage;
-        notifyOrAlert(watchCounter + ': ' + closestStoreProximityMessage + '.\nDistance=' + closestStoreDistance.toFixed(1));
+      if (closestStoreProximityMessage != null && closestStoreDistance < closestStoreProximityRadius) {
+        last5Distance = distEuclidean(closestStoreLat, closestStoreLng, last5Geo.lat, last5Geo.lng);
+        if (lastProximityMessage != closestStoreProximityMessage) { // Show only once 
+          lastProximityMessage = closestStoreProximityMessage;
+          notifyOrAlert(watchCounter + ': ' + closestStoreProximityMessage + '.\nDistance=' + closestStoreDistance.toFixed(1));
+        }
       }
-    }
+    
     // logic for welcome message
     if (storeProperty.id != null) {
       if (storeProperty.arrivalDuration > 15 && storeProperty.welcomeMessageDisplayed == false) 
